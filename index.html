@@ -111,6 +111,23 @@
 			@apply text-white font-semibold;
 		}
 	</style>
+	<script>
+		// Préchargement des images pour une meilleure performance
+		window.addEventListener('load', () => {
+			const images = [
+				'images/photo1.jpg',
+				'images/photo2.jpg',
+				'images/photo3.jpg',
+				'images/photo4.jpg',
+				'images/photo5.jpg',
+				'images/photo6.jpg'
+			];
+			images.forEach(src => {
+				const img = new Image();
+				img.src = src;
+			});
+		});
+	</script>
 </head>
 
 <body id="top" class="bg-black text-white font-sans" x-data="{ 
@@ -118,75 +135,44 @@
 		open: false,
 		image: '',
 		index: 0,
-		images: ['images/photo1.jpg', 'images/photo2.jpg', 'images/photo3.jpg', 'images/photo4.jpg', 'images/photo5.jpg', 'images/photo6.jpg'],
-		touchstartX: 0,
-		nextImage() {
-			this.index = (this.index + 1) % this.images.length;
-			this.image = this.images[this.index];
-		},
-		previousImage() {
-			this.index = (this.index - 1 + this.images.length) % this.images.length;
-			this.image = this.images[this.index];
-		},
-		handleSwipe: {
-			['@touchstart'](e) { this.touchstartX = e.changedTouches[0].screenX },
-			['@touchend'](e) {
-				const touchendX = e.changedTouches[0].screenX;
-				const diff = touchendX - this.touchstartX;
-				if (Math.abs(diff) > 50) {
-					if (diff > 0) {
-						this.previousImage();
-					} else {
-						this.nextImage();
-					}
-				}
-			}
-		},
+		images: [
+			'images/photo1.jpg',
+			'images/photo2.jpg',
+			'images/photo3.jpg',
+			'images/photo4.jpg',
+			'images/photo5.jpg',
+			'images/photo6.jpg'
+		],
 		formData: {
 			name: '',
 			email: '',
 			message: ''
 		},
-		submitForm() {
-			const mailtoLink = `mailto:math.drouet@gmail.com?subject=Intéressé par le MacBook Pro&body=De: ${this.formData.name}%0D%0AEmail: ${this.formData.email}%0D%0A%0D%0A${this.formData.message}`;
-			window.location.href = mailtoLink;
-			this.showModal = false;
-		},
-		parseMarkdownSections(markdownContent) {
-			const sections = [];
-			const contentDiv = document.createElement('div');
-			contentDiv.innerHTML = markdownContent;
-			const h2Elements = contentDiv.querySelectorAll('h2');
-			h2Elements.forEach(h2 => {
-				let content = '';
-				let sibling = h2.nextElementSibling;
-				while (sibling && sibling.tagName !== 'H2') {
-					content += sibling.outerHTML;
-					sibling = sibling.nextElementSibling;
-				}
-				sections.push({
-					title: h2.textContent,
-					content: content
-				});
-			});
-			return sections;
-		},
-		description: '',
-		features: '',
-		async loadContent() {
-			try {
-				// Charger la description
-				const descResponse = await fetch('content/description.md');
-				const descText = await descResponse.text();
-				this.description = marked.parse(descText);
-				
-				// Charger les caractéristiques
-				const featResponse = await fetch('content/features.md');
-				const featText = await featResponse.text();
-				this.features = marked.parse(featText);
-			} catch (error) {
-				console.error('Erreur lors du chargement du contenu:', error);
+		handleSwipe: {
+			['@touchstart'](e) {
+				this.touchstartX = e.changedTouches[0].screenX
+			},
+			['@touchend'](e) {
+				this.touchendX = e.changedTouches[0].screenX
+				this.handleGesture()
+			},
+			handleGesture() {
+				if (this.touchendX < this.touchstartX) this.nextImage()
+				if (this.touchendX > this.touchstartX) this.previousImage()
 			}
+		},
+		nextImage() {
+			this.index = (this.index + 1) % this.images.length
+			this.image = this.images[this.index]
+		},
+		previousImage() {
+			this.index = (this.index - 1 + this.images.length) % this.images.length
+			this.image = this.images[this.index]
+		},
+		async submitForm() {
+			// TODO: Implémenter la logique d'envoi du formulaire
+			console.log('Formulaire soumis:', this.formData)
+			this.showModal = false
 		}
 	}" @keydown.window.right="if(open) nextImage()" @keydown.window.left="if(open) previousImage()" @keydown.window.escape="open = false">
 	<main>
@@ -362,48 +348,21 @@
 	</main>
 
 	<!-- Bouton Navigation -->
-	<div x-data="scrollNav" x-show="visible" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform translate-y-2" @click="scrollToPreviousSection" class="fixed bottom-8 right-8 bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-lg cursor-pointer transition-all duration-300 hover:scale-110" style="display: none;">
-		<i class="fas fa-chevron-up text-xl"></i>
+	<div x-data="{ visible: false }" 
+		x-show="visible" 
+		x-transition:enter="transition ease-out duration-300"
+		x-transition:enter-start="opacity-0 transform translate-y-2"
+		x-transition:enter-end="opacity-100 transform translate-y-0"
+		x-transition:leave="transition ease-in duration-300"
+		x-transition:leave-start="opacity-100 transform translate-y-0"
+		x-transition:leave-end="opacity-0 transform translate-y-2"
+		@scroll.window="visible = window.scrollY > 100"
+		@click="document.getElementById('top').scrollIntoView({behavior: 'smooth'})"
+		class="fixed bottom-8 right-8 bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-lg cursor-pointer transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+		style="display: none;"
+		aria-label="Retour en haut de page">
+		<i class="fas fa-chevron-up text-xl" aria-hidden="true"></i>
 	</div>
-
-	<script>
-		document.addEventListener('alpine:init', () => {
-			Alpine.data('scrollNav', () => ({
-				visible: false,
-				sections: [],
-				currentSectionIndex: -1,
-
-				init() {
-					// Inclure toutes les sections, y compris l'intro, dans l'ordre inverse
-					this.sections = [...document.querySelectorAll('section')].reverse();
-					window.addEventListener('scroll', () => this.checkScroll());
-				},
-
-				checkScroll() {
-					this.visible = window.scrollY > 100;
-					const viewportMiddle = window.scrollY + window.innerHeight / 2;
-					this.currentSectionIndex = this.sections.findIndex(section => {
-						return section.offsetTop <= viewportMiddle;
-					});
-				},
-
-				scrollToPreviousSection() {
-					if (this.currentSectionIndex < this.sections.length - 1) {
-						const targetSection = this.sections[this.currentSectionIndex + 1];
-						targetSection.scrollIntoView({
-							behavior: 'smooth'
-						});
-					} else {
-						// Remonter tout en haut de la page
-						window.scrollTo({
-							top: 0,
-							behavior: 'smooth'
-						});
-					}
-				}
-			}));
-		});
-	</script>
 
 	<!-- Footer -->
 	<footer class="bg-gray-900 py-10 text-center text-gray-400 mt-10" role="contentinfo">
@@ -427,7 +386,7 @@
 
 			<div class="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-gradient-to-r from-gray-800 via-black to-gray-800 border border-gray-700 rounded-xl">
 				<div class="flex justify-between items-center mb-6">
-					<h3 id="modal-title" class="text-2xl font-semibold text-white">Contactez-moi</h3>
+					<h3 id="modal-title" class="text-2xl font-bold text-white">Contactez-moi</h3>
 					<button @click="showModal = false" class="text-gray-400 hover:text-white" aria-label="Fermer le formulaire">
 						<i class="fas fa-times" aria-hidden="true"></i>
 					</button>
@@ -464,50 +423,33 @@
 
 	<script>
 		document.addEventListener('alpine:init', () => {
-			Alpine.data('contentManager', () => ({
-				description: [],
-				features: [],
+			Alpine.data('sections', () => ({
+				sections: [],
 				async init() {
-					await this.loadContent();
-				},
-				async loadContent() {
 					try {
-						const [descResponse, featResponse] = await Promise.all([
-							fetch('content/description.md'),
-							fetch('content/features.md')
+						const [description, features] = await Promise.all([
+							fetch('content/description.md').then(r => r.text()),
+							fetch('content/features.md').then(r => r.text())
 						]);
+						
+						this.sections = [description, features]
+							.map(content => {
+								const titleMatch = content.match(/^## (.*)\n/);
+								const iconMatch = content.match(/\[\/\/\]: # "([^"]+)"/);
+								if (!titleMatch) return null;
 
-						const [descText, featText] = await Promise.all([
-							descResponse.text(),
-							featResponse.text()
-						]);
-
-						this.description = this.parseMarkdown(descText);
-						this.features = this.parseMarkdown(featText);
+								return {
+									title: titleMatch[1],
+									icon: iconMatch ? iconMatch[1] + ' text-2xl' : '',
+									content: content
+										.replace(/\[\/\/\]: # "[^"]+"\n\n/, '')
+										.replace(/^## .*\n/, '')
+								};
+							})
+							.filter(Boolean);
 					} catch (error) {
 						console.error('Erreur lors du chargement du contenu:', error);
 					}
-				},
-				parseMarkdown(text) {
-					if (!text) return [];
-					const sections = text.split(/(?=## )/);
-					return sections
-						.map(section => {
-							const titleMatch = section.match(/^## (.*)\n/);
-							const iconMatch = section.match(/\[\/\/\]: # "([^"]+)"/);
-							if (!titleMatch) return null;
-
-							const content = section
-								.replace(/\[\/\/\]: # "[^"]+"\n\n/, '')
-								.replace(/^## .*\n/, '');
-
-							return {
-								title: titleMatch[1],
-								icon: (iconMatch ? iconMatch[1] + ' text-2xl' : ''),
-								content: marked.parse(content)
-							};
-						})
-						.filter(Boolean);
 				}
 			}));
 		});
