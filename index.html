@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +16,7 @@
 	<meta property="og:description" content="MacBook Pro 14&quot; M1 Pro - 10 cœurs CPU, 16 cœurs GPU, 32Go RAM, 512Go SSD. Performance et élégance à 1700€">
 	<meta property="og:image" content="images/photo5.jpg">
 	<meta property="og:type" content="website">
-	
+
 	<!-- Twitter Card -->
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="MacBook Pro 14&quot; M1 Pro - À vendre">
@@ -23,13 +24,96 @@
 	<meta name="twitter:image" content="images/photo5.jpg">
 
 	<script src="https://cdn.tailwindcss.com"></script>
+	<script>
+		tailwind.config = {
+			theme: {
+				extend: {
+					typography: {
+						DEFAULT: {
+							css: {
+								color: '#fff',
+								h2: {
+									color: '#fff',
+								},
+								strong: {
+									color: '#fff',
+								},
+								li: {
+									color: '#cbd5e1',
+								},
+								p: {
+									color: '#cbd5e1',
+								},
+							},
+						},
+					},
+				},
+			},
+			plugins: [
+				tailwind.plugin.withOptions(() => {
+					return function({
+						addComponents
+					}) {
+						addComponents({
+							'.prose': {
+								'max-width': '65ch',
+								'@apply text-gray-300': {},
+								'& h2': {
+									'@apply text-2xl font-semibold mt-8 mb-4 text-white': {},
+								},
+								'& p': {
+									'@apply mb-4': {},
+								},
+								'& ul': {
+									'@apply list-disc list-inside mb-4 space-y-2': {},
+								},
+								'& li': {
+									'@apply ml-4': {},
+								},
+								'& strong': {
+									'@apply text-white font-semibold': {},
+								},
+							},
+						})
+					}
+				}),
+			],
+		}
+	</script>
 	<script src="https://kit.fontawesome.com/ec593f5eb0.js" crossorigin="anonymous"></script>
 	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+	<script>
+		marked.setOptions({
+			breaks: true,
+			gfm: true
+		});
+	</script>
 	<style>
-		[x-cloak] { display: none !important; }
+		[x-cloak] {
+			display: none !important;
+		}
+
+		/* Styles pour le contenu Markdown */
+		.markdown-content h2 {
+			@apply text-2xl font-semibold mt-6 mb-4;
+		}
+
+		.markdown-content p {
+			@apply mb-4 text-gray-300;
+		}
+
+		.markdown-content ul {
+			@apply list-disc list-inside mb-4 text-gray-300;
+		}
+
+		.markdown-content strong {
+			@apply text-white font-semibold;
+		}
 	</style>
 </head>
-<body class="bg-black text-white font-sans" x-data="{ 
+
+<body id="top" class="bg-black text-white font-sans" x-data="{ 
 		showModal: false,
 		open: false,
 		image: '',
@@ -67,11 +151,44 @@
 			const mailtoLink = `mailto:math.drouet@gmail.com?subject=Intéressé par le MacBook Pro&body=De: ${this.formData.name}%0D%0AEmail: ${this.formData.email}%0D%0A%0D%0A${this.formData.message}`;
 			window.location.href = mailtoLink;
 			this.showModal = false;
+		},
+		parseMarkdownSections(markdownContent) {
+			const sections = [];
+			const contentDiv = document.createElement('div');
+			contentDiv.innerHTML = markdownContent;
+			const h2Elements = contentDiv.querySelectorAll('h2');
+			h2Elements.forEach(h2 => {
+				let content = '';
+				let sibling = h2.nextElementSibling;
+				while (sibling && sibling.tagName !== 'H2') {
+					content += sibling.outerHTML;
+					sibling = sibling.nextElementSibling;
+				}
+				sections.push({
+					title: h2.textContent,
+					content: content
+				});
+			});
+			return sections;
+		},
+		description: '',
+		features: '',
+		async loadContent() {
+			try {
+				// Charger la description
+				const descResponse = await fetch('content/description.md');
+				const descText = await descResponse.text();
+				this.description = marked.parse(descText);
+				
+				// Charger les caractéristiques
+				const featResponse = await fetch('content/features.md');
+				const featText = await featResponse.text();
+				this.features = marked.parse(featText);
+			} catch (error) {
+				console.error('Erreur lors du chargement du contenu:', error);
+			}
 		}
-	}"
-	@keydown.window.right="if(open) nextImage()"
-	@keydown.window.left="if(open) previousImage()"
-	@keydown.window.escape="open = false">
+	}" @keydown.window.right="if(open) nextImage()" @keydown.window.left="if(open) previousImage()" @keydown.window.escape="open = false">
 	<main>
 		<!-- Section Intro Vente -->
 		<section class="max-w-4xl mx-auto text-center py-20 px-6" aria-labelledby="intro-title">
@@ -79,140 +196,162 @@
 			<p class="text-xl mt-4 text-gray-400">À vendre - Performance et élégance</p>
 
 			<div class="mt-6">
-				<img src="images/macbook-hero.jpg" alt="MacBook Pro 14 pouces vue de face, écran allumé montrant une interface élégante"
-					class="w-full rounded-lg shadow-lg">
+				<img src="images/macbook-hero.jpg" alt="MacBook Pro 14 pouces vue de face, écran allumé montrant une interface élégante" class="w-full rounded-lg shadow-lg">
 			</div>
 
-			<div class="mt-8 max-w-xs mx-auto">
-				<div class="bg-gradient-to-r from-gray-800 via-black to-gray-800 p-6 rounded-xl border border-gray-700 hover:scale-105 transition">
-					<i class="fas fa-tag text-2xl mb-4 text-green-400" aria-hidden="true"></i>
-					<p class="text-3xl font-bold text-white">Prix : 1700€</p>
-					<p class="text-gray-400 text-sm mt-2">Configuration haut de gamme</p>
-				</div>
-			</div>
 		</section>
 
-		<!-- Bento Grid - Caractéristiques -->
-		<section class="max-w-5xl mx-auto py-20 text-center" aria-labelledby="features-title">
-			<h2 id="features-title" class="text-4xl font-semibold mb-8">Pourquoi choisir ce MacBook Pro ?</h2>
 
-			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" role="list">
-				<div class="bg-gradient-to-r from-gray-800 via-black to-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col items-start hover:scale-105 transition" role="listitem">
-					<i class="fas fa-microchip text-2xl mb-4 text-green-400" aria-hidden="true"></i>
-					<p class="text-xl font-semibold">Puce M1 Pro</p>
-					<p class="text-gray-400 text-sm mt-2">Jusqu'à 9.8x plus rapide.</p>
-				</div>
-
-				<div class="bg-gradient-to-r from-gray-800 via-black to-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col items-start hover:scale-105 transition" role="listitem">
-					<i class="fas fa-brain text-2xl mb-4 text-blue-400" aria-hidden="true"></i>
-					<p class="text-xl font-semibold text-white">Apple Intelligence</p>
-					<p class="text-gray-400 text-sm mt-2">Expérience fluide avec macOS.</p>
-				</div>
-
-				<div class="bg-gradient-to-r from-gray-800 via-black to-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col items-start hover:scale-105 transition" role="listitem">
-					<i class="fas fa-tv text-2xl mb-4 text-yellow-400" aria-hidden="true"></i>
-					<p class="text-xl font-semibold">Écran Liquid Retina</p>
-					<p class="text-gray-400 text-sm mt-2">Contrastes inégalés.</p>
-				</div>
-
-				<div class="bg-gradient-to-r from-gray-800 via-black to-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col items-start hover:scale-105 transition" role="listitem">
-					<i class="fas fa-battery-full text-2xl mb-4 text-green-400" aria-hidden="true"></i>
-					<p class="text-xl font-semibold">Autonomie</p>
-					<p class="text-gray-400 text-sm mt-2">Travaillez toute la journée.</p>
-				</div>
-
-				<div class="bg-gradient-to-r from-gray-800 via-black to-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col items-start hover:scale-105 transition" role="listitem">
-					<i class="fas fa-volume-up text-2xl mb-4 text-red-400" aria-hidden="true"></i>
-					<p class="text-xl font-semibold">Son immersif</p>
-					<p class="text-gray-400 text-sm mt-2">6 haut-parleurs, Dolby Atmos.</p>
-				</div>
-
-				<div class="bg-gradient-to-r from-gray-800 via-black to-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col items-start hover:scale-105 transition" role="listitem">
-					<i class="fas fa-keyboard text-2xl mb-4 text-purple-400" aria-hidden="true"></i>
-					<p class="text-xl font-semibold">Clavier AZERTY</p>
-					<p class="text-gray-400 text-sm mt-2">Confort de frappe exceptionnel.</p>
-				</div>
-			</div>
-
-			<div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-				<div class="col-span-1 sm:col-start-1 lg:col-start-2">
-					<button @click="showModal = true"
-						class="flex items-center justify-center bg-gradient-to-r from-gray-800 via-black to-gray-800 text-white px-6 py-4 rounded-xl w-full hover:scale-105 transition border border-gray-700"
-						aria-label="Ouvrir le formulaire de contact">
-						Me contacter 
-						<span class="ml-3">
-							<i class="fas fa-envelope text-lg" aria-hidden="true"></i>
-						</span>
+		<!-- Section Prix et CTA -->
+		<section class="max-w-5xl mx-auto -mt-6 px-6 text-center" x-data="{ showForm: false }">
+			<div class="bg-gradient-to-br from-gray-800 via-gray-900 to-black p-8 rounded-2xl border border-gray-700 shadow-xl">
+				<div class="flex flex-col items-center gap-6">
+					<h2 class="text-4xl font-bold text-white">MacBook Pro 14" M1 Pro</h2>
+					<div class="flex items-baseline gap-2">
+						<span class="text-6xl font-bold text-emerald-400">1700€</span>
+						<span class="text-gray-400">TTC</span>
+					</div>
+					<p class="text-lg text-gray-300">Configuration haut de gamme en excellent état</p>
+					<button @click="showForm = true" class="mt-4 px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-lg rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center gap-2">
+						<i class="fas fa-shopping-cart"></i>
+						J'achète
 					</button>
 				</div>
 			</div>
+
+			<!-- Modal Formulaire -->
+			<div x-show="showForm" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+				<div class="flex items-center justify-center min-h-screen px-4">
+					<div class="fixed inset-0 bg-black opacity-50"></div>
+					<div class="relative bg-gray-900 rounded-2xl p-8 max-w-lg w-full border border-gray-700 shadow-2xl">
+						<button @click="showForm = false" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+							<i class="fas fa-times text-xl"></i>
+						</button>
+						<h3 class="text-2xl font-bold text-white mb-6">Formulaire d'achat</h3>
+						<form class="space-y-4">
+							<div>
+								<label class="block text-sm font-medium text-gray-300 mb-1">Nom complet</label>
+								<input type="text" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500">
+							</div>
+							<div>
+								<label class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+								<input type="email" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500">
+							</div>
+							<div>
+								<label class="block text-sm font-medium text-gray-300 mb-1">Téléphone</label>
+								<input type="tel" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500">
+							</div>
+							<div>
+								<label class="block text-sm font-medium text-gray-300 mb-1">Message (optionnel)</label>
+								<textarea class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 h-24"></textarea>
+							</div>
+							<button type="submit" class="w-full px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors duration-300">
+								Envoyer ma demande
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
 		</section>
 
+		<!-- Sections Bento -->
+		<div x-data="contentManager">
+			<!-- Section Description -->
+			<section class="max-w-5xl mx-auto py-12 px-6" aria-labelledby="description-title">
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<template x-for="(section, index) in description" :key="index">
+						<div class="flex flex-col h-full bg-gradient-to-br from-gray-800 via-gray-900 to-black p-8 rounded-xl border border-gray-700 hover:border-gray-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+							<div class="flex items-center gap-3 mb-6">
+								<i :class="section.icon"></i>
+								<h2 x-text="section.title" class="text-xl font-semibold text-white"></h2>
+							</div>
+							<div x-html="section.content" class="prose prose-sm prose-invert max-w-none flex-grow">
+								<style>
+									strong {
+										@apply text-white text-lg
+									}
+
+									p {
+										@apply text-gray-400
+									}
+
+									ul {
+										@apply text-gray-400 mt-2 space-y-1
+									}
+								</style>
+							</div>
+						</div>
+					</template>
+				</div>
+			</section>
+
+			<!-- Section Caractéristiques -->
+			<section class="max-w-5xl mx-auto py-12 px-6" aria-labelledby="features-title">
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<template x-for="(section, index) in features" :key="index">
+						<div class="flex flex-col h-full bg-gradient-to-br from-gray-800 via-gray-900 to-black p-8 rounded-xl border border-gray-700 hover:border-gray-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+							<div class="flex items-center gap-3 mb-6">
+								<i :class="section.icon"></i>
+								<h2 x-text="section.title" class="text-xl font-semibold text-white"></h2>
+							</div>
+							<div x-html="section.content" class="prose prose-sm prose-invert max-w-none flex-grow">
+								<style>
+									strong {
+										@apply text-white text-lg
+									}
+
+									p {
+										@apply text-gray-400
+									}
+
+									ul {
+										@apply text-gray-400 mt-2 space-y-1
+									}
+								</style>
+							</div>
+						</div>
+					</template>
+				</div>
+			</section>
+		</div>
+
+
 		<!-- Galerie Photo avec Lightbox -->
-		<section class="max-w-5xl mx-auto py-20" aria-labelledby="gallery-title">
+		<section class="max-w-5xl mx-auto py-12 px-6" aria-labelledby="gallery-title">
 			<h2 id="gallery-title" class="text-3xl font-semibold text-center mb-8">Galerie Photos</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" role="list">
 				<template x-for="(photo, i) in images" :key="i">
-					<div class="bg-gradient-to-r from-gray-800 via-black to-gray-800 p-6 rounded-xl border border-gray-700 hover:scale-105 transition cursor-pointer"
-						@click="image = photo; index = i; open = true"
-						role="listitem"
-						:aria-label="'Photo ' + (i + 1) + ' du MacBook Pro'">
-						<img :src="photo"
-							class="w-full h-48 object-cover rounded-lg shadow-lg"
-							:alt="'Vue détaillée ' + (i + 1) + ' du MacBook Pro'">
+					<div class="bg-gradient-to-r from-gray-800 via-black to-gray-800 p-6 rounded-xl border border-gray-700 hover:scale-105 transition cursor-pointer" @click="image = photo; index = i; open = true" role="listitem" :aria-label="'Photo ' + (i + 1) + ' du MacBook Pro'">
+						<img :src="photo" class="w-full h-48 object-cover rounded-lg shadow-lg" :alt="'Vue détaillée ' + (i + 1) + ' du MacBook Pro'">
 					</div>
 				</template>
 			</div>
 
 			<!-- Lightbox -->
-			<div x-show="open" 
-				role="dialog"
-				aria-label="Galerie photo lightbox"
-				x-transition:enter="transition ease-out duration-300"
-				x-transition:enter-start="opacity-0 transform scale-90"
-				x-transition:enter-end="opacity-100 transform scale-100"
-				x-transition:leave="transition ease-in duration-300"
-				x-transition:leave-start="opacity-100 transform scale-100"
-				x-transition:leave-end="opacity-0 transform scale-90"
-				class="fixed inset-0 z-50 overflow-y-auto" 
-				x-cloak
-				@click.self="open = false">
+			<div x-show="open" role="dialog" aria-label="Galerie photo lightbox" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90" class="fixed inset-0 z-50 overflow-y-auto" x-cloak @click.self="open = false">
 				<div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
 					<div class="fixed inset-0 transition-opacity" aria-hidden="true">
 						<div class="absolute inset-0 bg-black bg-opacity-75"></div>
 					</div>
 
 					<div class="relative inline-block max-w-4xl max-h-full bg-black rounded-lg overflow-hidden">
-						<button @click="open = false" 
-							class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300"
-							aria-label="Fermer la galerie">
+						<button @click="open = false" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300" aria-label="Fermer la galerie">
 							<i class="fas fa-times" aria-hidden="true"></i>
 						</button>
-						<button @click="previousImage()"
-							class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-gray-300 sm:block hidden"
-							aria-label="Image précédente">
+						<button @click="previousImage()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-gray-300 sm:block hidden" aria-label="Image précédente">
 							<i class="fas fa-chevron-left" aria-hidden="true"></i>
 						</button>
-						<img :src="image" 
-							class="max-w-full max-h-[90vh] object-contain"
-							:alt="'Vue détaillée du MacBook Pro'"
-							x-bind="handleSwipe">
-						<button @click="nextImage()"
-							class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-gray-300 sm:block hidden"
-							aria-label="Image suivante">
+						<img :src="image" class="max-w-full max-h-[90vh] object-contain" :alt="'Vue détaillée du MacBook Pro'" x-bind="handleSwipe">
+						<button @click="nextImage()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-gray-300 sm:block hidden" aria-label="Image suivante">
 							<i class="fas fa-chevron-right" aria-hidden="true"></i>
 						</button>
-						
+
 						<!-- Indicateurs mobiles -->
 						<div class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 sm:hidden">
-							<button @click="previousImage()" 
-								class="bg-white bg-opacity-25 hover:bg-opacity-50 rounded-full p-2"
-								aria-label="Image précédente">
+							<button @click="previousImage()" class="bg-white bg-opacity-25 hover:bg-opacity-50 rounded-full p-2" aria-label="Image précédente">
 								<i class="fas fa-chevron-left" aria-hidden="true"></i>
 							</button>
-							<button @click="nextImage()" 
-								class="bg-white bg-opacity-25 hover:bg-opacity-50 rounded-full p-2"
-								aria-label="Image suivante">
+							<button @click="nextImage()" class="bg-white bg-opacity-25 hover:bg-opacity-50 rounded-full p-2" aria-label="Image suivante">
 								<i class="fas fa-chevron-right" aria-hidden="true"></i>
 							</button>
 						</div>
@@ -222,34 +361,65 @@
 		</section>
 	</main>
 
+	<!-- Bouton Navigation -->
+	<div x-data="scrollNav" x-show="visible" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform translate-y-2" @click="scrollToPreviousSection" class="fixed bottom-8 right-8 bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-lg cursor-pointer transition-all duration-300 hover:scale-110" style="display: none;">
+		<i class="fas fa-chevron-up text-xl"></i>
+	</div>
+
+	<script>
+		document.addEventListener('alpine:init', () => {
+			Alpine.data('scrollNav', () => ({
+				visible: false,
+				sections: [],
+				currentSectionIndex: -1,
+
+				init() {
+					// Inclure toutes les sections, y compris l'intro, dans l'ordre inverse
+					this.sections = [...document.querySelectorAll('section')].reverse();
+					window.addEventListener('scroll', () => this.checkScroll());
+				},
+
+				checkScroll() {
+					this.visible = window.scrollY > 100;
+					const viewportMiddle = window.scrollY + window.innerHeight / 2;
+					this.currentSectionIndex = this.sections.findIndex(section => {
+						return section.offsetTop <= viewportMiddle;
+					});
+				},
+
+				scrollToPreviousSection() {
+					if (this.currentSectionIndex < this.sections.length - 1) {
+						const targetSection = this.sections[this.currentSectionIndex + 1];
+						targetSection.scrollIntoView({
+							behavior: 'smooth'
+						});
+					} else {
+						// Remonter tout en haut de la page
+						window.scrollTo({
+							top: 0,
+							behavior: 'smooth'
+						});
+					}
+				}
+			}));
+		});
+	</script>
+
 	<!-- Footer -->
 	<footer class="bg-gray-900 py-10 text-center text-gray-400 mt-10" role="contentinfo">
 		<p class="text-lg font-semibold text-white">MacBook Pro 14" M1 Pro - 1700€</p>
 		<p class="mt-2">10 cœurs CPU, 16 cœurs GPU, 32Go RAM, 512Go SSD</p>
 		<div class="mt-4">
-			<button @click="showModal = true" 
-				class="text-blue-400 hover:underline"
-				aria-label="Ouvrir le formulaire de contact">
+			<button @click="showModal = true" class="text-blue-400 hover:underline" aria-label="Ouvrir le formulaire de contact">
 				<i class="fas fa-envelope" aria-hidden="true"></i> Me contacter
 			</button>
 		</div>
-		<p class="mt-6 text-sm">&copy; 2025 - Mathieu Drouet - Inspiré par <a href="https://www.apple.com/macbook-pro/" class="text-blue-400 hover:underline" target="_blank" rel="noopener">Apple</a></p>
+		<p class="mt-6 text-sm">&copy; 2025 - Mathieu Drouet</p>
 		<p class="mt-2 text-xs text-gray-500">Photos &copy; Mathieu Drouet. Images de présentation Apple &copy; Apple Inc.</p>
 	</footer>
 
 	<!-- Modal de Contact -->
-	<div x-show="showModal" 
-		role="dialog"
-		aria-labelledby="modal-title"
-		x-transition:enter="transition ease-out duration-300"
-		x-transition:enter-start="opacity-0 transform scale-90"
-		x-transition:enter-end="opacity-100 transform scale-100"
-		x-transition:leave="transition ease-in duration-300"
-		x-transition:leave-start="opacity-100 transform scale-100"
-		x-transition:leave-end="opacity-0 transform scale-90"
-		class="fixed inset-0 z-50 overflow-y-auto" 
-		x-cloak
-		@keydown.escape.window="showModal = false">
+	<div x-show="showModal" role="dialog" aria-labelledby="modal-title" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90" class="fixed inset-0 z-50 overflow-y-auto" x-cloak @keydown.escape.window="showModal = false">
 		<div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
 			<div class="fixed inset-0 transition-opacity" aria-hidden="true">
 				<div class="absolute inset-0 bg-black bg-opacity-75"></div>
@@ -258,9 +428,7 @@
 			<div class="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-gradient-to-r from-gray-800 via-black to-gray-800 border border-gray-700 rounded-xl">
 				<div class="flex justify-between items-center mb-6">
 					<h3 id="modal-title" class="text-2xl font-semibold text-white">Contactez-moi</h3>
-					<button @click="showModal = false" 
-						class="text-gray-400 hover:text-white"
-						aria-label="Fermer le formulaire">
+					<button @click="showModal = false" class="text-gray-400 hover:text-white" aria-label="Fermer le formulaire">
 						<i class="fas fa-times" aria-hidden="true"></i>
 					</button>
 				</div>
@@ -268,39 +436,24 @@
 				<form @submit.prevent="submitForm" class="space-y-4">
 					<div>
 						<label for="name" class="block text-sm font-medium text-gray-300">Nom</label>
-						<input type="text" 
-							id="name"
-							x-model="formData.name" 
-							required
-							class="mt-1 block w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+						<input type="text" id="name" x-model="formData.name" required class="mt-1 block w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
 					</div>
 
 					<div>
 						<label for="email" class="block text-sm font-medium text-gray-300">Email</label>
-						<input type="email" 
-							id="email"
-							x-model="formData.email" 
-							required
-							class="mt-1 block w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+						<input type="email" id="email" x-model="formData.email" required class="mt-1 block w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
 					</div>
 
 					<div>
 						<label for="message" class="block text-sm font-medium text-gray-300">Message</label>
-						<textarea id="message"
-							x-model="formData.message" 
-							required 
-							rows="4"
-							class="mt-1 block w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+						<textarea id="message" x-model="formData.message" required rows="4" class="mt-1 block w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
 					</div>
 
 					<div class="flex justify-end mt-6">
-						<button type="button" 
-							@click="showModal = false"
-							class="mr-3 px-4 py-2 text-sm font-medium text-gray-300 hover:text-white">
+						<button type="button" @click="showModal = false" class="mr-3 px-4 py-2 text-sm font-medium text-gray-300 hover:text-white">
 							Annuler
 						</button>
-						<button type="submit"
-							class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+						<button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
 							Envoyer
 						</button>
 					</div>
@@ -308,5 +461,57 @@
 			</div>
 		</div>
 	</div>
+
+	<script>
+		document.addEventListener('alpine:init', () => {
+			Alpine.data('contentManager', () => ({
+				description: [],
+				features: [],
+				async init() {
+					await this.loadContent();
+				},
+				async loadContent() {
+					try {
+						const [descResponse, featResponse] = await Promise.all([
+							fetch('content/description.md'),
+							fetch('content/features.md')
+						]);
+
+						const [descText, featText] = await Promise.all([
+							descResponse.text(),
+							featResponse.text()
+						]);
+
+						this.description = this.parseMarkdown(descText);
+						this.features = this.parseMarkdown(featText);
+					} catch (error) {
+						console.error('Erreur lors du chargement du contenu:', error);
+					}
+				},
+				parseMarkdown(text) {
+					if (!text) return [];
+					const sections = text.split(/(?=## )/);
+					return sections
+						.map(section => {
+							const titleMatch = section.match(/^## (.*)\n/);
+							const iconMatch = section.match(/\[\/\/\]: # "([^"]+)"/);
+							if (!titleMatch) return null;
+
+							const content = section
+								.replace(/\[\/\/\]: # "[^"]+"\n\n/, '')
+								.replace(/^## .*\n/, '');
+
+							return {
+								title: titleMatch[1],
+								icon: (iconMatch ? iconMatch[1] + ' text-2xl' : ''),
+								content: marked.parse(content)
+							};
+						})
+						.filter(Boolean);
+				}
+			}));
+		});
+	</script>
 </body>
+
 </html>
