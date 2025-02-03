@@ -110,6 +110,26 @@
 		.markdown-content strong {
 			@apply text-white font-semibold;
 		}
+
+		/* Styles pour les animations au scroll */
+		.fade-up-enter {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+		.fade-up-enter-active {
+			transition: opacity 0.8s ease-out, transform 1s ease-out;
+			opacity: 1;
+			transform: translateY(0);
+		}
+		.scale-up-enter {
+			opacity: 0;
+			transform: scale(0.95);
+		}
+		.scale-up-enter-active {
+			transition: opacity 0.8s ease-out, transform 1s ease-out;
+			opacity: 1;
+			transform: scale(1);
+		}
 	</style>
 	<script>
 		// Préchargement des images pour une meilleure performance
@@ -126,6 +146,28 @@
 				const img = new Image();
 				img.src = src;
 			});
+		});
+	</script>
+	<script>
+		// Ajout du composant pour les animations au scroll
+		document.addEventListener('alpine:init', () => {
+			Alpine.data('scrollAnimation', () => ({
+				show: false,
+				init() {
+					let observer = new IntersectionObserver((entries) => {
+						entries.forEach(entry => {
+							if (entry.isIntersecting) {
+								this.show = true;
+								observer.unobserve(entry.target);
+							}
+						});
+					}, {
+						threshold: 0.2
+					});
+					
+					observer.observe(this.$el);
+				}
+			}));
 		});
 	</script>
 </head>
@@ -177,64 +219,66 @@
 	}" @keydown.window.right="if(open) nextImage()" @keydown.window.left="if(open) previousImage()" @keydown.window.escape="open = false">
 	<main>
 		<!-- Section Intro Vente -->
-		<section class="max-w-4xl mx-auto text-center py-20 px-6" aria-labelledby="intro-title">
-			<h1 id="intro-title" class="text-5xl font-semibold">MacBook Pro 14" M1 Pro</h1>
-			<p class="text-xl mt-4 text-gray-400">À vendre - Performance et élégance</p>
+		<section class="max-w-4xl mx-auto text-center py-20 px-6" aria-labelledby="intro-title" x-data="scrollAnimation">
+			<div :class="{ 'fade-up-enter-active': show, 'fade-up-enter': !show }">
+				<h1 id="intro-title" class="text-5xl font-bold">MacBook Pro 14"</h1>
+				<p class="text-xl mt-4 text-gray-400">À vendre - Performance et élégance</p>
 
-			<div class="mt-6">
-				<img src="images/macbook-hero.jpg" alt="MacBook Pro 14 pouces vue de face, écran allumé montrant une interface élégante" class="w-full rounded-lg shadow-lg">
-			</div>
-
-		</section>
-
-
-		<!-- Section Prix et CTA -->
-		<section class="max-w-5xl mx-auto -mt-6 px-6 text-center" x-data="{ showForm: false }">
-			<div class="bg-gradient-to-br from-gray-800 via-gray-900 to-black p-8 rounded-2xl border border-gray-700 shadow-xl">
-				<div class="flex flex-col items-center gap-6">
-					<h2 class="text-4xl font-bold text-white">MacBook Pro 14" M1 Pro</h2>
-					<div class="flex items-baseline gap-2">
-						<span class="text-6xl font-bold text-emerald-400">1700€</span>
-						<span class="text-gray-400">TTC</span>
-					</div>
-					<p class="text-lg text-gray-300">Configuration haut de gamme en excellent état</p>
-					<button @click="showForm = true" class="mt-4 px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-lg rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center gap-2">
-						<i class="fas fa-shopping-cart"></i>
-						J'achète
-					</button>
+				<div class="mt-6">
+					<img src="images/macbook-hero.jpg" alt="MacBook Pro 14 pouces vue de face, écran allumé montrant une interface élégante" class="w-full rounded-lg shadow-lg">
 				</div>
 			</div>
+		</section>
 
-			<!-- Modal Formulaire -->
-			<div x-show="showForm" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
-				<div class="flex items-center justify-center min-h-screen px-4">
-					<div class="fixed inset-0 bg-black opacity-50"></div>
-					<div class="relative bg-gray-900 rounded-2xl p-8 max-w-lg w-full border border-gray-700 shadow-2xl">
-						<button @click="showForm = false" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-							<i class="fas fa-times text-xl"></i>
+		<!-- Section Prix et CTA -->
+		<section class="max-w-5xl mx-auto -mt-6 px-6 text-center" x-data="{ showForm: false }" x-data="scrollAnimation">
+			<div :class="{ 'scale-up-enter-active': show, 'scale-up-enter': !show }">
+				<div class="bg-gradient-to-br from-gray-800 via-gray-900 to-black p-8 rounded-2xl border border-gray-700 shadow-xl">
+					<div class="flex flex-col items-center gap-6">
+						<h2 class="text-4xl font-bold text-white">MacBook Pro 14" M1 Pro</h2>
+						<div class="flex items-baseline gap-2">
+							<span class="text-6xl font-bold text-emerald-400">1700€</span>
+							<span class="text-gray-400">TTC</span>
+						</div>
+						<p class="text-lg text-gray-300">Configuration haut de gamme en excellent état</p>
+						<button @click="showForm = true" class="mt-4 px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-lg rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center gap-2">
+							<i class="fas fa-shopping-cart"></i>
+							J'achète
 						</button>
-						<h3 class="text-2xl font-bold text-white mb-6">Formulaire d'achat</h3>
-						<form class="space-y-4">
-							<div>
-								<label class="block text-sm font-medium text-gray-300 mb-1">Nom complet</label>
-								<input type="text" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500">
-							</div>
-							<div>
-								<label class="block text-sm font-medium text-gray-300 mb-1">Email</label>
-								<input type="email" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500">
-							</div>
-							<div>
-								<label class="block text-sm font-medium text-gray-300 mb-1">Téléphone</label>
-								<input type="tel" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500">
-							</div>
-							<div>
-								<label class="block text-sm font-medium text-gray-300 mb-1">Message (optionnel)</label>
-								<textarea class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 h-24"></textarea>
-							</div>
-							<button type="submit" class="w-full px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors duration-300">
-								Envoyer ma demande
+					</div>
+				</div>
+
+				<!-- Modal Formulaire -->
+				<div x-show="showForm" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+					<div class="flex items-center justify-center min-h-screen px-4">
+						<div class="fixed inset-0 bg-black opacity-50"></div>
+						<div class="relative bg-gray-900 rounded-2xl p-8 max-w-lg w-full border border-gray-700 shadow-2xl">
+							<button @click="showForm = false" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+								<i class="fas fa-times text-xl"></i>
 							</button>
-						</form>
+							<h3 class="text-2xl font-bold text-white mb-6">Formulaire d'achat</h3>
+							<form class="space-y-4">
+								<div>
+									<label class="block text-sm font-medium text-gray-300 mb-1">Nom complet</label>
+									<input type="text" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500">
+								</div>
+								<div>
+									<label class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+									<input type="email" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500">
+								</div>
+								<div>
+									<label class="block text-sm font-medium text-gray-300 mb-1">Téléphone</label>
+									<input type="tel" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500">
+								</div>
+								<div>
+									<label class="block text-sm font-medium text-gray-300 mb-1">Message (optionnel)</label>
+									<textarea class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 h-24"></textarea>
+								</div>
+								<button type="submit" class="w-full px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors duration-300">
+									Envoyer ma demande
+								</button>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -243,8 +287,8 @@
 		<!-- Sections Bento -->
 		<div x-data="contentManager">
 			<!-- Section Description -->
-			<section class="max-w-5xl mx-auto py-12 px-6" aria-labelledby="description-title">
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+			<section class="max-w-5xl mx-auto mt-20 px-6" aria-labelledby="description-title">
+				<div :class="{ 'fade-up-enter-active': show, 'fade-up-enter': !show }" class="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<template x-for="(section, index) in description" :key="index">
 						<div class="flex flex-col h-full bg-gradient-to-br from-gray-800 via-gray-900 to-black p-8 rounded-xl border border-gray-700 hover:border-gray-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
 							<div class="flex items-center gap-3 mb-6">
@@ -272,8 +316,8 @@
 			</section>
 
 			<!-- Section Caractéristiques -->
-			<section class="max-w-5xl mx-auto py-12 px-6" aria-labelledby="features-title">
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+			<section class="max-w-5xl mx-auto mt-20 px-6" aria-labelledby="features-title">
+				<div :class="{ 'fade-up-enter-active': show, 'fade-up-enter': !show }" class="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<template x-for="(section, index) in features" :key="index">
 						<div class="flex flex-col h-full bg-gradient-to-br from-gray-800 via-gray-900 to-black p-8 rounded-xl border border-gray-700 hover:border-gray-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
 							<div class="flex items-center gap-3 mb-6">
@@ -301,45 +345,46 @@
 			</section>
 		</div>
 
-
 		<!-- Galerie Photo avec Lightbox -->
-		<section class="max-w-5xl mx-auto py-12 px-6" aria-labelledby="gallery-title">
-			<h2 id="gallery-title" class="text-3xl font-semibold text-center mb-8">Galerie Photos</h2>
-			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" role="list">
-				<template x-for="(photo, i) in images" :key="i">
-					<div class="bg-gradient-to-r from-gray-800 via-black to-gray-800 p-6 rounded-xl border border-gray-700 hover:scale-105 transition cursor-pointer" @click="image = photo; index = i; open = true" role="listitem" :aria-label="'Photo ' + (i + 1) + ' du MacBook Pro'">
-						<img :src="photo" class="w-full h-48 object-cover rounded-lg shadow-lg" :alt="'Vue détaillée ' + (i + 1) + ' du MacBook Pro'">
-					</div>
-				</template>
-			</div>
+		<section class="max-w-5xl mx-auto mt-20 px-6" aria-labelledby="gallery-title" x-data="scrollAnimation">
+			<div :class="{ 'fade-up-enter-active': show, 'fade-up-enter': !show }">
+				<h2 id="gallery-title" class="text-3xl font-semibold text-center mb-8">Galerie Photos</h2>
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" role="list">
+					<template x-for="(photo, i) in images" :key="i">
+						<div class="bg-gradient-to-r from-gray-800 via-black to-gray-800 p-6 rounded-xl border border-gray-700 hover:scale-105 transition cursor-pointer" @click="image = photo; index = i; open = true" role="listitem" :aria-label="'Photo ' + (i + 1) + ' du MacBook Pro'">
+							<img :src="photo" class="w-full h-48 object-cover rounded-lg shadow-lg" :alt="'Vue détaillée ' + (i + 1) + ' du MacBook Pro'">
+						</div>
+					</template>
+				</div>
 
-			<!-- Lightbox -->
-			<div x-show="open" role="dialog" aria-label="Galerie photo lightbox" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90" class="fixed inset-0 z-50 overflow-y-auto" x-cloak @click.self="open = false">
-				<div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-					<div class="fixed inset-0 transition-opacity" aria-hidden="true">
-						<div class="absolute inset-0 bg-black bg-opacity-75"></div>
-					</div>
+				<!-- Lightbox -->
+				<div x-show="open" role="dialog" aria-label="Galerie photo lightbox" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90" class="fixed inset-0 z-50 overflow-y-auto" x-cloak @click.self="open = false">
+					<div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+						<div class="fixed inset-0 transition-opacity" aria-hidden="true">
+							<div class="absolute inset-0 bg-black bg-opacity-75"></div>
+						</div>
 
-					<div class="relative inline-block max-w-4xl max-h-full bg-black rounded-lg overflow-hidden">
-						<button @click="open = false" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300" aria-label="Fermer la galerie">
-							<i class="fas fa-times" aria-hidden="true"></i>
-						</button>
-						<button @click="previousImage()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-gray-300 sm:block hidden" aria-label="Image précédente">
-							<i class="fas fa-chevron-left" aria-hidden="true"></i>
-						</button>
-						<img :src="image" class="max-w-full max-h-[90vh] object-contain" :alt="'Vue détaillée du MacBook Pro'" x-bind="handleSwipe">
-						<button @click="nextImage()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-gray-300 sm:block hidden" aria-label="Image suivante">
-							<i class="fas fa-chevron-right" aria-hidden="true"></i>
-						</button>
-
-						<!-- Indicateurs mobiles -->
-						<div class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 sm:hidden">
-							<button @click="previousImage()" class="bg-white bg-opacity-25 hover:bg-opacity-50 rounded-full p-2" aria-label="Image précédente">
+						<div class="relative inline-block max-w-4xl max-h-full bg-black rounded-lg overflow-hidden">
+							<button @click="open = false" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300" aria-label="Fermer la galerie">
+								<i class="fas fa-times" aria-hidden="true"></i>
+							</button>
+							<button @click="previousImage()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-gray-300 sm:block hidden" aria-label="Image précédente">
 								<i class="fas fa-chevron-left" aria-hidden="true"></i>
 							</button>
-							<button @click="nextImage()" class="bg-white bg-opacity-25 hover:bg-opacity-50 rounded-full p-2" aria-label="Image suivante">
+							<img :src="image" class="max-w-full max-h-[90vh] object-contain" :alt="'Vue détaillée du MacBook Pro'" x-bind="handleSwipe">
+							<button @click="nextImage()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-gray-300 sm:block hidden" aria-label="Image suivante">
 								<i class="fas fa-chevron-right" aria-hidden="true"></i>
 							</button>
+
+							<!-- Indicateurs mobiles -->
+							<div class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 sm:hidden">
+								<button @click="previousImage()" class="bg-white bg-opacity-25 hover:bg-opacity-50 rounded-full p-2" aria-label="Image précédente">
+									<i class="fas fa-chevron-left" aria-hidden="true"></i>
+								</button>
+								<button @click="nextImage()" class="bg-white bg-opacity-25 hover:bg-opacity-50 rounded-full p-2" aria-label="Image suivante">
+									<i class="fas fa-chevron-right" aria-hidden="true"></i>
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -423,33 +468,61 @@
 
 	<script>
 		document.addEventListener('alpine:init', () => {
-			Alpine.data('sections', () => ({
-				sections: [],
+			Alpine.data('contentManager', () => ({
+				description: [],
+				features: [],
+				show: false,
 				async init() {
-					try {
-						const [description, features] = await Promise.all([
-							fetch('content/description.md').then(r => r.text()),
-							fetch('content/features.md').then(r => r.text())
-						]);
-						
-						this.sections = [description, features]
-							.map(content => {
-								const titleMatch = content.match(/^## (.*)\n/);
-								const iconMatch = content.match(/\[\/\/\]: # "([^"]+)"/);
-								if (!titleMatch) return null;
+					let observer = new IntersectionObserver((entries) => {
+						entries.forEach(entry => {
+							if (entry.isIntersecting) {
+								this.show = true;
+								observer.unobserve(entry.target);
+							}
+						});
+					}, {
+						threshold: 0.2
+					});
+					
+					observer.observe(this.$el);
 
-								return {
-									title: titleMatch[1],
-									icon: iconMatch ? iconMatch[1] + ' text-2xl' : '',
-									content: content
-										.replace(/\[\/\/\]: # "[^"]+"\n\n/, '')
-										.replace(/^## .*\n/, '')
-								};
-							})
-							.filter(Boolean);
+					try {
+						const [descResponse, featResponse] = await Promise.all([
+							fetch('content/description.md'),
+							fetch('content/features.md')
+						]);
+
+						const [descText, featText] = await Promise.all([
+							descResponse.text(),
+							featResponse.text()
+						]);
+
+						this.description = this.parseMarkdown(descText);
+						this.features = this.parseMarkdown(featText);
 					} catch (error) {
 						console.error('Erreur lors du chargement du contenu:', error);
 					}
+				},
+				parseMarkdown(text) {
+					if (!text) return [];
+					const sections = text.split(/(?=## )/);
+					return sections
+						.map(section => {
+							const titleMatch = section.match(/^## (.*)\n/);
+							const iconMatch = section.match(/\[\/\/\]: # "([^"]+)"/);
+							if (!titleMatch) return null;
+
+							const content = section
+								.replace(/\[\/\/\]: # "[^"]+"\n\n/, '')
+								.replace(/^## .*\n/, '');
+
+							return {
+								title: titleMatch[1],
+								icon: iconMatch ? iconMatch[1] + ' text-2xl' : '',
+								content: marked.parse(content)
+							};
+						})
+						.filter(Boolean);
 				}
 			}));
 		});
