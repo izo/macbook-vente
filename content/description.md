@@ -20,7 +20,7 @@
 **Inclus** :
 - Chargeur MagSafe d'origine
 - Boîte d'origine complète
-- Protection en cuir offerte
+- Protection offerte
 
 ## Raison de la Vente
 [//]: # "fas fa-exchange-alt text-yellow-400"
@@ -31,3 +31,46 @@
 [//]: # "fas fa-tag text-purple-400"
 
 **Prix** : 1700€ (négociable dans la limite du raisonnable)
+
+## État Impeccable
+[//]: # "fas fa-star"
+
+**MacBook Pro 14" en parfait état**
+
+- Acheté en décembre 2021
+- Utilisé dans un environnement non-fumeur
+- Aucune rayure ni défaut
+- Batterie à 92% de capacité
+- Avec boîte d'origine et accessoires
+
+## Configuration Premium
+[//]: # "fas fa-microchip"
+
+**Processeur M1 Pro haute performance**
+
+- CPU 10 cœurs
+- GPU 16 cœurs
+- Neural Engine 16 cœurs
+- 32 Go de mémoire unifiée
+- SSD 512 Go ultra-rapide
+
+## Écran XDR
+[//]: # "fas fa-tv"
+
+**Écran Liquid Retina XDR 14.2"**
+
+- Résolution 3024 x 1964 pixels
+- Technologie ProMotion 120Hz
+- Luminosité 1600 nits
+- Large gamme de couleurs P3
+- True Tone
+
+## Garantie & Support
+[//]: # "fas fa-shield-alt"
+
+**Tranquillité d'esprit assurée**
+
+- Garantie Apple jusqu'à décembre 2023
+- AppleCare+ disponible à l'achat
+- Facture d'origine fournie
+- Assistance pour le transfert
