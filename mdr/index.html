@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lumon Industries - Please enjoy each department equally">
+    <meta name="keywords" content="Lumon, Severance, Macro Data Refinement">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Lumon Industries">
+    <meta property="og:description" content="The work is mysterious and important">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Lumon Industries</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script async src="https://tally.so/widgets/embed.js"></script>
+
+    <style>
+        .lumon-bg {
+            background-color: #E8EDE8;
+        }
+        .mdr-card {
+            background-color: #C5D6C5;
+            border: 1px solid #B4C5B4;
+        }
+        .od-card {
+            background-color: #D6E0D6;
+            border: 1px solid #C5D1C5;
+        }
+        .pw-card {
+            background-color: #E8EDE8;
+            border: 1px solid #D6E0D6;
+        }
+        .lumon-text {
+            color: #2C382C;
+        }
+        .card-text {
+            color: #465446;
+        }
+        .lumon-accent {
+            color: #537153;
+        }
+        .lumon-button {
+            background-color: #537153;
+            transition: all 0.3s ease;
+        }
+        .lumon-button:hover {
+            background-color: #465446;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            box-shadow: 0 0 30px rgba(83, 113, 83, 0.15);
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="lumon-bg min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="max-w-4xl mx-auto text-center">
+        <!-- Logo Lumon -->
+        <div class="text-9xl mb-8 animate-pulse lumon-accent">
+            <i class="fa-solid fa-droplet"></i>
+        </div>
+
+        <!-- Titre -->
+        <h1 class="text-4xl font-bold mb-6 lumon-text">
+            Lumon Industries
+        </h1>
+
+        <!-- Description -->
+        <p class="text-xl card-text mb-8">
+            The work is mysterious and important
+        </p>
+
+        <!-- Cartes Lumon -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div class="mdr-card rounded-xl p-8 shadow-sm relative overflow-hidden card-hover">
+                <div class="relative">
+                    <i class="fa-solid fa-table-cells text-3xl mb-4 lumon-text"></i>
+                    <h3 class="text-lg font-medium lumon-text">Macro Data Refinement</h3>
+                    <p class="card-text text-sm">Please enjoy each number equally</p>
+                </div>
+            </div>
+            <div class="od-card rounded-xl p-8 shadow-sm relative overflow-hidden card-hover">
+                <div class="relative">
+                    <i class="fa-solid fa-baby text-3xl mb-4 lumon-text"></i>
+                    <h3 class="text-lg font-medium lumon-text">Optics & Design</h3>
+                    <p class="card-text text-sm">The baby is smiling</p>
+                </div>
+            </div>
+            <div class="pw-card rounded-xl p-8 shadow-sm relative overflow-hidden card-hover">
+                <div class="relative">
+                    <i class="fa-solid fa-infinity text-3xl mb-4 lumon-text"></i>
+                    <h3 class="text-lg font-medium lumon-text">The Perpetuity Wing</h3>
+                    <p class="card-text text-sm">Praise Kier</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boutons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="index.html" 
+                class="lumon-button text-white px-8 py-3 rounded-xl hover:shadow-lg flex items-center justify-center">
+                <i class="fas fa-elevator mr-2"></i>
+                Return to outie
+            </a>
+            <button 
+                class="contact-btn lumon-button text-white px-8 py-3 rounded-xl hover:shadow-lg flex items-center justify-center">
+                <i class="fa-solid fa-droplet mr-2"></i>
+                Break Room
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const openTallyForm = () => {
+                Tally.openPopup('3EZMjX', {
+                    layout: 'modal',
+                    width: 900,
+                    alignLeft: true,
+                    hideTitle: false,
+                    emoji: {
+                        text: '💧',
+                        animation: 'pulse'
+                    },
+                    autoClose: 3000,
+                    onSubmit: () => {
+                        console.log('Your outie has been notified');
+                    }
+                });
+            };
+
+            document.querySelectorAll('.contact-btn').forEach(btn => {
+                btn.addEventListener('click', openTallyForm);
+            });
+        });
+    </script>
+</body>
+</html>
