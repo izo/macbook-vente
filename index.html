@@ -222,18 +222,103 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 py-10 text-center text-gray-400 mt-10" role="contentinfo">
-        <p class="text-lg font-semibold text-white">MacBook Pro 14" M1 Pro - 1700€</p>
-        <p class="mt-2">10 cœurs CPU, 16 cœurs GPU, 32Go RAM, 512Go SSD</p>
-        <div class="mt-4">
-            <button @click="showModal = true" 
-                class="text-blue-400 hover:underline"
-                aria-label="Ouvrir le formulaire de contact">
-                <i class="fas fa-envelope" aria-hidden="true"></i> Me contacter
-            </button>
+    <footer class="relative bg-gradient-to-b from-black to-gray-900 pt-16 pb-12 text-gray-400 overflow-hidden">
+        <!-- Effet de grain -->
+        <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAElBMVEUAAAD8/vz08vT09vT8+vzs7uxH16TeAAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAuFJREFUOI0Vk+3NLiEIRG1B8ClQqBZ8ChAqBZ8C1J6D2X2Z3/MCe4uJk+A0/RgGGKX/P9iobTh96TXbxaT8Q1wVzz38D1KNrq0mCR4DY/jLA1OvjJQm5uX4gHuCYIC7RlkzPIDWlO4VPGqjBGCWZl5WF8zqbDPBrTjDlA/4qLEA7vkQQAXwBZCDg0mDAxIYHFYBHQbXFZBh8FgBXQY/FLBh8FsBMQy+KuDC4JMCOQxeK1DD4LkCIwz+V6CFwV8FZhj8UuAJg+8KrDD4qEAOg7cK1DB4ZH1W0GHwUEEAg/sK0hlcVqCfK5hucEtBPoNzCsIZnFJQwuCEghgGxxXkMjisII3BUQXlDA4pqGNwVB/ygT/eOZKm3vHFi8EPmCANmIK7d/yKBGCKt5rBvpdBej2sQINhj1YxRIp1pOMQh7Xqszm3wGjqCA8BJ5RpwNUt+EAeXt+UwZk3Ak5ASJCuoNXxk9EU19DxEcSmQjGn/J5lanDKRB9ZYAh/nFJ0IYZ+0L0YPiBYB1B9YPRVsQEJov4CgIG/0BiB5CUyzkAC2QG4eWDHgYQy0KL3wCn68QNq7IDA80CnAjyQtQEJjgeMQYEKLOXuE6/o+BM0YPQbBmP0Hf0cQQBaz9FvHEwg6wC88sA2PJCHDih2DzT4nB4YcE4PEJySA9FBnB44FZwc2PTKLmRQjz9VAGPk+FQBHD7Vj4VL3zG4r6QDp0EZVF8FQmAO7+p3Bml8qyMEcvhWXxTI4VudKJA8TpwZJPGt2EAKT8UgJ5PAQzE5HxDOU/UhN8gAD8UpyQcFeKj+JCIyhz7FJhJ44LHaQQI9PBcHSOCBB9PiAhk8FxNI4IEnU+ACqzwYE0gAD6YiZgRWeDQOkEACD8cFEngwXPxJgVmeDQMkcBaPxhO6gIweTQQk8GxMIIFn4wIJPJsESODZuEACz8YFEngmCQTwbGwgAfkPiQp3Yx4Nb5QAAAAASUVORK5CYII=');"></div>
+
+        <div class="relative max-w-7xl mx-auto px-6">
+            <!-- Logo et Info Principale -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <!-- Colonne 1 - Logo et Description -->
+                <div class="lg:col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <i class="fas fa-laptop text-3xl text-blue-400"></i>
+                        <h3 class="text-2xl font-semibold text-white">MacBook Pro 14"</h3>
+                    </div>
+                    <p class="text-gray-400 mb-6">Une machine exceptionnelle, alliant puissance et élégance. Équipée de la puce M1 Pro, 32Go de RAM et 512Go SSD.</p>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-2xl font-bold text-white">1700€</span>
+                        <button @click="showModal = true" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-all duration-300 transform hover:scale-105">
+                            Contact
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Colonne 2 - Caractéristiques -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Configuration</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-microchip text-green-400"></i>
+                            <span>M1 Pro - 10 cœurs</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-memory text-blue-400"></i>
+                            <span>32Go RAM</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-hdd text-purple-400"></i>
+                            <span>512Go SSD</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Colonne 3 - Liens Rapides -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Liens Utiles</h4>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="https://www.apple.com/macbook-pro/" class="hover:text-blue-400 transition-colors flex items-center space-x-2" target="_blank" rel="noopener">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span>Specs officielles</span>
+                            </a>
+                        </li>
+                        <li>
+                            <button @click="showModal = true" class="hover:text-blue-400 transition-colors flex items-center space-x-2">
+                                <i class="fas fa-envelope"></i>
+                                <span>Me contacter</span>
+                            </button>
+                        </li>
+                        <li>
+                            <a href="#gallery-title" class="hover:text-blue-400 transition-colors flex items-center space-x-2">
+                                <i class="fas fa-images"></i>
+                                <span>Voir les photos</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Ligne de séparation avec effet -->
+            <div class="relative">
+                <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div class="w-full border-t border-gray-800"></div>
+                </div>
+                <div class="relative flex justify-center">
+                    <div class="px-4">
+                        <i class="fab fa-apple text-2xl text-gray-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright et Mentions Légales -->
+            <div class="pt-8 mt-8 text-center">
+                <p class="text-sm">&copy; 2025 - Mathieu Drouet</p>
+                <p class="mt-2 text-xs text-gray-600">Photos &copy; Mathieu Drouet. Images de présentation Apple &copy; Apple Inc.</p>
+                <div class="mt-4 flex justify-center space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="mailto:math.drouet@gmail.com" class="text-gray-500 hover:text-blue-400 transition-colors">
+                        <i class="fas fa-envelope text-xl"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-        <p class="mt-6 text-sm">&copy; 2025 - Mathieu Drouet - Inspiré par <a href="https://www.apple.com/macbook-pro/" class="text-blue-400 hover:underline" target="_blank" rel="noopener">Apple</a></p>
-        <p class="mt-2 text-xs text-gray-500">Photos &copy; Mathieu Drouet. Images de présentation Apple &copy; Apple Inc.</p>
     </footer>
 
     <!-- Modal de Contact -->
