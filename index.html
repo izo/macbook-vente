@@ -31,6 +31,41 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script async src="https://tally.so/widgets/embed.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const openTallyForm = () => {
+                Tally.openPopup('3EZMjX', {
+                    layout: 'modal',
+                    width: 900,
+                    alignLeft: true,
+                    hideTitle: false,
+                    emoji: {
+                        text: '💬',
+                        animation: 'bounce'
+                    },
+                    autoClose: 3000,
+                    onSubmit: () => {
+                        console.log('Formulaire envoyé !');
+                    }
+                });
+            };
+
+            // Ajouter l'événement à tous les boutons de contact
+            document.querySelectorAll('.contact-btn').forEach(btn => {
+                btn.addEventListener('click', openTallyForm);
+            });
+        });
+    </script>
+    <script>
+        var btn = document.querySelector("#contact-btn");
+        btn?.addEventListener("click", function(e) {
+            e.preventDefault();
+            Tally.openPopup('3EZMjX', {
+                width: 900,
+                height: 600,
+            });
+        });
+    </script>
 
     <!-- Cache pour Alpine.js -->
     <style>[x-cloak] { display: none !important; }</style>
@@ -101,16 +136,15 @@
                             <span class="text-4xl font-bold text-white">1700€</span>
                             <span class="text-green-400 bg-green-400/10 px-3 py-1 rounded-full text-sm">Disponible</span>
                         </div>
-                        <a 
-                            class="group relative inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl overflow-hidden transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl w-full"
-                            href="#tally-open=3EZMjX&tally-layout=modal&tally-auto-close=4000">
+                        <button 
+                            class="contact-btn group relative inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl overflow-hidden transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl w-full cursor-pointer">
                             <span class="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-600 to-blue-500"></span>
                             <span class="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-blue-400 opacity-30 group-hover:rotate-90"></span>
                             <span class="relative flex items-center justify-center">
                                 <i class="fas fa-envelope-open-text mr-2"></i>
                                 Me contacter
                             </span>
-                        </a>
+                        </button>
                     </div>
 
                     <!-- Configuration -->
@@ -208,16 +242,15 @@
 
             <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div class="col-span-1 sm:col-start-1 lg:col-start-2">
-                    <a 
-                        class="group relative inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl overflow-hidden transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl w-full"
-                        href="#tally-open=3EZMjX&tally-layout=modal&tally-auto-close=4000">
+                    <button 
+                        class="contact-btn group relative inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl overflow-hidden transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl w-full cursor-pointer">
                         <span class="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-600 to-blue-500"></span>
                         <span class="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-blue-400 opacity-30 group-hover:rotate-90"></span>
                         <span class="relative flex items-center justify-center">
                             <i class="fas fa-envelope-open-text mr-2"></i>
                             Me contacter
                         </span>
-                    </a>
+                    </button>
                 </div>
             </div>
         </section>
@@ -326,11 +359,10 @@
                     <p class="text-gray-400 mb-6">Une machine exceptionnelle, alliant puissance et élégance. Équipée de la puce M1 Pro, 32Go de RAM et 512Go SSD.</p>
                     <div class="flex items-center space-x-4">
                         <span class="text-2xl font-bold text-white">1700€</span>
-                        <a 
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-all duration-300 transform hover:scale-105"
-                            href="#tally-open=3EZMjX&tally-layout=modal&tally-auto-close=4000">
+                        <button 
+                            class="contact-btn bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 cursor-pointer">
                             Contact
-                        </a>
+                        </button>
                     </div>
                 </div>
 
@@ -364,12 +396,11 @@
                             </a>
                         </li>
                         <li>
-                            <a 
-                                class="hover:text-blue-400 transition-colors flex items-center space-x-2"
-                                href="#tally-open=3EZMjX&tally-layout=modal&tally-auto-close=4000">
+                            <button 
+                                class="contact-btn hover:text-blue-400 transition-colors flex items-center space-x-2 cursor-pointer">
                                 <i class="fas fa-envelope-open-text"></i>
                                 <span>Me contacter</span>
-                            </a>
+                            </button>
                         </li>
                         <li>
                             <a href="#gallery-title" class="hover:text-blue-400 transition-colors flex items-center space-x-2">
