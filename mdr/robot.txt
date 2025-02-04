@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /images/
+Allow: /css/
+
+# Interdire l'accès aux fichiers système
+Disallow: /.git/
+Disallow: /.nova/
+Disallow: /.htaccess
+Disallow: /favicon/
+Disallow: /*.json$
+
+# Sitemap
+Sitemap: https://votre-domaine.com/sitemap.xml
+
+# Temps d'attente entre les requêtes
+Crawl-delay: 10
