@@ -74,7 +74,7 @@
     @keydown.window.escape="open = false">
     <main>
         <!-- Section Intro Vente -->
-        <section class="max-w-4xl mx-auto text-center py-20 px-6" aria-labelledby="intro-title">
+        <section class="max-w-5xl mx-auto py-20 text-center" aria-labelledby="intro-title">
             <h1 id="intro-title" class="text-5xl font-semibold">MacBook Pro 14" M1 Pro</h1>
             <p class="text-xl mt-4 text-gray-400">À vendre - Performance et élégance</p>
 
@@ -83,11 +83,58 @@
                     class="w-full rounded-lg shadow-lg">
             </div>
 
-            <div class="mt-8 max-w-xs mx-auto">
-                <div class="bg-gradient-to-r from-gray-800 via-black to-gray-800 p-6 rounded-xl border border-gray-700 hover:scale-105 transition">
-                    <i class="fas fa-tag text-2xl mb-4 text-green-400" aria-hidden="true"></i>
-                    <p class="text-3xl font-bold text-white">Prix : 1700€</p>
-                    <p class="text-gray-400 text-sm mt-2">Configuration haut de gamme</p>
+            <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 shadow-2xl mb-16 relative overflow-hidden">
+                <!-- Effet de brillance -->
+                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 opacity-20 blur"></div>
+                
+                <div class="relative grid md:grid-cols-2 gap-8 items-center">
+                    <!-- Prix et CTA -->
+                    <div class="text-center md:text-left">
+                        <p class="text-gray-400 mb-2">Prix de vente</p>
+                        <div class="flex items-center justify-center md:justify-start gap-3 mb-6">
+                            <span class="text-4xl font-bold text-white">1700€</span>
+                            <span class="text-green-400 bg-green-400/10 px-3 py-1 rounded-full text-sm">Disponible</span>
+                        </div>
+                        <button @click="showModal = true" 
+                            class="group relative inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl overflow-hidden transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl">
+                            <span class="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-600 to-blue-500"></span>
+                            <span class="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-blue-400 opacity-30 group-hover:rotate-90"></span>
+                            <span class="relative flex items-center">
+                                <i class="fas fa-envelope-open-text mr-2"></i>
+                                Me contacter
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- Configuration -->
+                    <div class="bg-black/30 rounded-xl p-6">
+                        <h3 class="text-xl font-semibold text-white mb-4 flex items-center">
+                            <i class="fas fa-laptop text-blue-400 mr-2"></i>
+                            État et Configuration
+                        </h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-center text-gray-300">
+                                <i class="fas fa-check text-green-400 mr-2"></i>
+                                <span>État : Excellent, acheté en 2024</span>
+                            </li>
+                            <li class="flex items-center text-gray-300">
+                                <i class="fas fa-check text-green-400 mr-2"></i>
+                                <span>MacBook Pro M1 Pro (10 cœurs)</span>
+                            </li>
+                            <li class="flex items-center text-gray-300">
+                                <i class="fas fa-check text-green-400 mr-2"></i>
+                                <span>Mémoire : 32 Go</span>
+                            </li>
+                            <li class="flex items-center text-gray-300">
+                                <i class="fas fa-check text-green-400 mr-2"></i>
+                                <span>Stockage : SSD 512 Go</span>
+                            </li>
+                            <li class="flex items-center text-gray-300">
+                                <i class="fas fa-box text-blue-400 mr-2"></i>
+                                <span>Boîte et accessoires d'origine</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
