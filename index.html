@@ -6,9 +6,13 @@
     <meta name="description" content="MacBook Pro 14&quot; M1 Pro à vendre - 10 cœurs CPU, 16 cœurs GPU, 32Go RAM, 512Go SSD. Performance et élégance à 1700€">
     <title>MacBook Pro 14" M1 Pro - À vendre</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon.png">
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#000000">
+    <meta name="theme-color" content="#000000">
 
     <!-- Meta tags pour le partage social -->
     <meta property="og:title" content="MacBook Pro 14&quot; M1 Pro - À vendre">
@@ -202,11 +206,12 @@
             <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div class="col-span-1 sm:col-start-1 lg:col-start-2">
                     <button @click="showModal = true" 
-                        class="flex items-center justify-center bg-gradient-to-r from-gray-800 via-black to-gray-800 text-white px-6 py-4 rounded-xl w-full hover:scale-105 transition border border-gray-700"
-                        aria-label="Ouvrir le formulaire de contact">
-                        Me contacter 
-                        <span class="ml-3">
-                            <i class="fas fa-envelope text-lg" aria-hidden="true"></i>
+                        class="group relative inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl overflow-hidden transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl w-full">
+                        <span class="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-600 to-blue-500"></span>
+                        <span class="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-blue-400 opacity-30 group-hover:rotate-90"></span>
+                        <span class="relative flex items-center justify-center">
+                            <i class="fas fa-envelope text-lg"></i>
+                            Me contacter
                         </span>
                     </button>
                 </div>
@@ -379,17 +384,6 @@
             <div class="pt-8 mt-8 text-center">
                 <p class="text-sm">&copy; 2025 - Mathieu Drouet</p>
                 <p class="mt-2 text-xs text-gray-600">Photos &copy; Mathieu Drouet. Images de présentation Apple &copy; Apple Inc.</p>
-                <div class="mt-4 flex justify-center space-x-6">
-                    <a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">
-                        <i class="fab fa-twitter text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">
-                        <i class="fab fa-linkedin text-xl"></i>
-                    </a>
-                    <a href="mailto:math.drouet@gmail.com" class="text-gray-500 hover:text-blue-400 transition-colors">
-                        <i class="fas fa-envelope text-xl"></i>
-                    </a>
-                </div>
             </div>
         </div>
     </footer>
